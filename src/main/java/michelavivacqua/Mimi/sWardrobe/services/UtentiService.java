@@ -73,12 +73,14 @@ public class UtentiService {
         return url;
     }
 
-    public Utente uploadUtenteImage (MultipartFile image, int utenteId) throws IOException {
-        Utente found = this.findById(utenteId);
+    public Utente uploadUtenteImage(int utenteId, MultipartFile image, Utente utenteAutenticato) throws IOException { Utente found = utentiDAO.findById(utenteId)
+            .orElseThrow(() -> new NotFoundException("Utente con ID " + utenteId + " non trovato!"));
+
+        // Imposta la nuova propic solo se l'utente autenticato è lo stesso dell'utente che si sta cercando di modificare
         found.setPropic(this.uploadImage(image));
-        this.utentiDAO.save(found);
-        return found;
+        return utentiDAO.save(found);
     }
+
 
     public Page<Utente> getUtenti(int page, int size, String sortBy){
         if(size > 70) size = 70;

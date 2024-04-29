@@ -1,6 +1,7 @@
 package michelavivacqua.Mimi.sWardrobe.controllers;
 
 import michelavivacqua.Mimi.sWardrobe.entities.Indumento;
+import michelavivacqua.Mimi.sWardrobe.entities.Utente;
 import michelavivacqua.Mimi.sWardrobe.exceptions.BadRequestException;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoRespDTO;
@@ -14,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -23,18 +26,19 @@ public class IndumentiController {
     @Autowired
     private IndumentiService indumentiService;
 
+
     //    1. POST http://localhost:3001/indumenti (+ body)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public NewIndumentoRespDTO saveIndumento(@RequestBody @Validated NewIndumentoDTO body, BindingResult validation){
-
-        if(validation.hasErrors()) {
+    public NewIndumentoRespDTO saveIndumento(@RequestBody @Validated NewIndumentoDTO body, BindingResult validation) {
+        if (validation.hasErrors()) {
             System.out.println(validation.getAllErrors());
             throw new BadRequestException(validation.getAllErrors());
         }
+        Integer utenteId = body.utenteId();
         System.out.println(body);
-        return new NewIndumentoRespDTO(this.indumentiService.saveIndumento(body).getId());}
-
+        return new NewIndumentoRespDTO(this.indumentiService.saveIndumento(body, utenteId).getId());
+    }
 
 
     // 2. GET http://localhost:3001/indumenti/{{indumentoId}}
@@ -70,5 +74,13 @@ public class IndumentiController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteIndumentoById(@PathVariable int indumentoId) {
         this.indumentiService.findByIdAndDelete(indumentoId);
+    }
+
+
+    //    UPLOAD DI FOTO PER INDUMENTO
+//   POST http://localhost:3001/indumenti/upload/{indumentoId}
+    @PostMapping("/upload/{indumentoId}")
+    public Indumento uploadImage (@RequestParam("image") MultipartFile image, @PathVariable int indumentoId) throws IOException {
+        return this.indumentiService.uploadIndumentoImage(image,indumentoId);
     }
 }

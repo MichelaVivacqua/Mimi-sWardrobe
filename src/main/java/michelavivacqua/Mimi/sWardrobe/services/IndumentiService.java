@@ -1,6 +1,9 @@
 package michelavivacqua.Mimi.sWardrobe.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import michelavivacqua.Mimi.sWardrobe.entities.Indumento;
+import michelavivacqua.Mimi.sWardrobe.entities.Utente;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.repositories.IndumentiDAO;
 import michelavivacqua.Mimi.sWardrobe.repositories.UtentiDAO;
@@ -11,7 +14,9 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -23,6 +28,9 @@ public class IndumentiService {
     @Autowired
     private UtentiDAO utentiDAO;
 
+    @Autowired
+    private Cloudinary cloudinaryUploader;
+
     public IndumentiService(IndumentiDAO indumentiDAO) {
         this.indumentiDAO = indumentiDAO;
     }
@@ -32,11 +40,17 @@ public class IndumentiService {
     }
 
 
+    public Indumento saveIndumento(NewIndumentoDTO newIndumentoDTO, Integer utenteId) {
+        Utente utente = utentiDAO.findById(utenteId)
+                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + utenteId));
 
-    public Indumento saveIndumento(NewIndumentoDTO newIndumentoDTO) {
-
-        Indumento indumento = new Indumento(newIndumentoDTO.image(),newIndumentoDTO.colore(),newIndumentoDTO.tipo());
-        System.out.println("Sto salvando l'indumento come:"+ indumento);
+        Indumento indumento = new Indumento(
+                newIndumentoDTO.image(),
+                newIndumentoDTO.colore(),
+                newIndumentoDTO.tipo(),
+                utente
+        );
+//        System.out.println("Sto salvando l'indumento come:"+ indumento);
         return indumentiDAO.save(indumento);
     }
 
@@ -64,5 +78,17 @@ public class IndumentiService {
         if(size > 50) size = 50;
         Pageable pageable = PageRequest.of(page, size, Sort.by(sortBy));
         return this.indumentiDAO.findAll(pageable);
+    }
+
+    public String uploadImage(MultipartFile image) throws IOException {
+        String url = (String) cloudinaryUploader.uploader().upload(image.getBytes(), ObjectUtils.emptyMap()).get("url");
+        return url;
+    }
+
+    public Indumento uploadIndumentoImage (MultipartFile image, int indumentoId) throws IOException {
+        Indumento found = this.findById(indumentoId);
+        found.setImage(this.uploadImage(image));
+        this.indumentiDAO.save(found);
+        return found;
     }
 }

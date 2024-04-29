@@ -9,7 +9,7 @@ import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = "utente")
 @Entity
 public class Indumento {
     @Id
@@ -27,12 +27,11 @@ public class Indumento {
     @JoinColumn(name = "utente_id")
     private Utente utente;
 
-    public Indumento(String image, Colore colore, Tipo tipo) {
+
+    public Indumento(String image, Colore colore, Tipo tipo, Utente utente) {
         this.image = image;
         this.colore = colore;
         this.tipo = tipo;
+        this.utente=utente;
     }
-
-
-
 }

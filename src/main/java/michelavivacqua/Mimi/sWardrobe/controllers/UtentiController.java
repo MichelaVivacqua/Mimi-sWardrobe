@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -96,11 +97,19 @@ public class UtentiController {
     }
 
 
+
     //    UPLOAD DI FOTO PER UTENTE
-//   POST http://localhost:3001/utenti/upload/{utenteId}
-    @PostMapping("/upload/{utenteId}")
-    public Utente uploadPropic (@RequestParam("propic") MultipartFile image, @PathVariable int utenteId) throws IOException {
-        return this.utentiService.uploadUtenteImage(image,utenteId);
+    //   POST http://localhost:3001/utenti/upload + authorization con bear token dell'utente di cui si vuole cambiare l'immagine del profilo
+    @PostMapping("/upload")
+    public Utente uploadUtenteImage(Authentication authentication, @RequestParam("propic") MultipartFile image) throws IOException {
+        // Ottengo l'utente autenticato
+        Utente utenteAutenticato = (Utente) authentication.getPrincipal();
+
+        // Passo l'utente autenticato, l'immagine e l'ID dell'utente autenticato al service per l'aggiornamento della propic
+        return this.utentiService.uploadUtenteImage(utenteAutenticato.getId(), image, utenteAutenticato);
     }
+
+
+
 
 }
