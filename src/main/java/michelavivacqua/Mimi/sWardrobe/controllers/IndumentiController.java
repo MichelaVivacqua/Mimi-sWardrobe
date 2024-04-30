@@ -7,6 +7,7 @@ import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoRespDTO;
 import michelavivacqua.Mimi.sWardrobe.services.IndumentiService;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,9 +36,9 @@ public class IndumentiController {
             System.out.println(validation.getAllErrors());
             throw new BadRequestException(validation.getAllErrors());
         }
-        Integer utenteId = body.utenteId();
+//        Integer utenteId = body.utenteId();
         System.out.println(body);
-        return new NewIndumentoRespDTO(this.indumentiService.saveIndumento(body, utenteId).getId());
+        return new NewIndumentoRespDTO(this.indumentiService.saveIndumento(body).getId());
     }
 
 
@@ -77,10 +78,15 @@ public class IndumentiController {
     }
 
 
-    //    UPLOAD DI FOTO PER INDUMENTO
+//        UPLOAD DI FOTO PER INDUMENTO
 //   POST http://localhost:3001/indumenti/upload/{indumentoId}
     @PostMapping("/upload/{indumentoId}")
     public Indumento uploadImage (@RequestParam("image") MultipartFile image, @PathVariable int indumentoId) throws IOException {
         return this.indumentiService.uploadIndumentoImage(image,indumentoId);
     }
+
+
+
+
+
 }

@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -39,21 +41,31 @@ public class IndumentiService {
         return indumentiDAO.findAll();
     }
 
+    public Indumento saveIndumento(NewIndumentoDTO newIndumentoDTO) {
+        // Ottengo l'oggetto di autenticazione
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-    public Indumento saveIndumento(NewIndumentoDTO newIndumentoDTO, Integer utenteId) {
+        // Estraggo l'ID dell'utente e ottengo l'utente dal DAO
+        int utenteId = extractUtenteIdFromAuthentication(authentication);
         Utente utente = utentiDAO.findById(utenteId)
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + utenteId));
 
+        // Creo un nuovo indumento e assegno l'utente
         Indumento indumento = new Indumento(
                 newIndumentoDTO.image(),
                 newIndumentoDTO.colore(),
                 newIndumentoDTO.tipo(),
                 utente
         );
-//        System.out.println("Sto salvando l'indumento come:"+ indumento);
         return indumentiDAO.save(indumento);
     }
 
+    // Metodo per estrarre l'ID dell'utente dalla classe Utente
+    private int extractUtenteIdFromAuthentication(Authentication authentication) {
+        // Ottengo l'utente autenticato dall'oggetto di autenticazione
+        Utente utente = (Utente) authentication.getPrincipal();
+        return utente.getId();
+    }
 
 
     public Indumento findById(int id) {
@@ -91,4 +103,6 @@ public class IndumentiService {
         this.indumentiDAO.save(found);
         return found;
     }
+
+//    DOVREI SISTEMARE QUESTO CODICE PER FAR SI CHE OGNI UTENTE POSSA CARICARE LA FOTO SOLO DEI SUOI INDUMENTI????
 }
