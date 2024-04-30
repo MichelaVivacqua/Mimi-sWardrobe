@@ -4,6 +4,8 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import michelavivacqua.Mimi.sWardrobe.entities.Indumento;
 import michelavivacqua.Mimi.sWardrobe.entities.Utente;
+import michelavivacqua.Mimi.sWardrobe.enums.Colore;
+import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.repositories.IndumentiDAO;
 import michelavivacqua.Mimi.sWardrobe.repositories.UtentiDAO;
@@ -103,9 +105,18 @@ public class IndumentiService {
         this.indumentiDAO.save(found);
         return found;
     }
-//    DOVREI SISTEMARE QUESTO CODICE PER FAR SI CHE OGNI UTENTE POSSA CARICARE LA FOTO SOLO DEI SUOI INDUMENTI????
+//    DOVREI SISTEMARE QUESTO CODICE SOPRA PER FAR SI CHE OGNI UTENTE POSSA CARICARE LA FOTO SOLO DEI SUOI INDUMENTI????
 
     public List<Indumento> getIndumentiByUtenteId(int utenteId) {
         return indumentiDAO.findByUtenteId(utenteId);
     }
+
+    public List<Indumento> getIndumentiByUtenteIdAndColore(int utenteId, Colore colore) {
+        return indumentiDAO.findByUtenteIdAndColore(utenteId, colore);
+    }
+
+    public List<Indumento> getIndumentiByUtenteIdAndTipo(int utenteId, Tipo tipo) {
+        return indumentiDAO.findByUtenteIdAndTipo(utenteId, tipo);
+    }
+
 }

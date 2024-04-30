@@ -2,6 +2,8 @@ package michelavivacqua.Mimi.sWardrobe.controllers;
 
 import michelavivacqua.Mimi.sWardrobe.entities.Indumento;
 import michelavivacqua.Mimi.sWardrobe.entities.Utente;
+import michelavivacqua.Mimi.sWardrobe.enums.Colore;
+import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
 import michelavivacqua.Mimi.sWardrobe.exceptions.BadRequestException;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoRespDTO;
@@ -97,7 +99,21 @@ public class IndumentiController {
         return this.indumentiService.uploadIndumentoImage(image,indumentoId);
     }
 
+//    GET http://localhost:3001/indumenti/miei/colore?colore=BLU
+    @GetMapping("/miei/colore")
+    public List<Indumento> getIndumentiPerColore(Authentication authentication, @RequestParam Colore colore) {
+        Utente utenteAutenticato = (Utente) authentication.getPrincipal();
+        int utenteId = utenteAutenticato.getId();
+        return indumentiService.getIndumentiByUtenteIdAndColore(utenteId, colore);
+    }
 
+    //    GET http://localhost:3001/indumenti/miei/tipo?tipo=PANTALONE
+    @GetMapping("miei/tipo")
+    public List<Indumento> getIndumentiPerTipo(Authentication authentication, @RequestParam Tipo tipo) {
+        Utente utenteAutenticato = (Utente) authentication.getPrincipal();
+        int utenteId = utenteAutenticato.getId();
+        return indumentiService.getIndumentiByUtenteIdAndTipo(utenteId, tipo);
+    }
 
 
 
