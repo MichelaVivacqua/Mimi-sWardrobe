@@ -10,6 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -29,9 +30,14 @@ public class Utente implements UserDetails {
     private String password;
     @Enumerated(EnumType.STRING)
     private Ruolo ruolo;
+
     @JsonIgnore
     @OneToMany(mappedBy = "utente")
     private List<Indumento> indumenti;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "utente")
+    private Set<Abbinamento> abbinamenti;
 
 
     public Utente(String username, String name, String surname, String email, String propic, String password, Ruolo ruolo) {

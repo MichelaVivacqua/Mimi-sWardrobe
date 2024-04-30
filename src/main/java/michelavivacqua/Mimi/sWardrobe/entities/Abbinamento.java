@@ -4,23 +4,19 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
+@Entity
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-@Entity
 public class Abbinamento {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "utente_id")
-    private Utente utente;
 
     @ManyToMany
     @JoinTable(
@@ -30,9 +26,5 @@ public class Abbinamento {
     )
     private Set<Indumento> indumenti = new HashSet<>();
 
-    public Abbinamento(Utente utente, Set<Indumento> indumenti) {
-        this.utente = utente;
-        this.indumenti = indumenti;
-    }
-}
 
+}
