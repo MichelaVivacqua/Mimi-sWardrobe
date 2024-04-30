@@ -7,6 +7,7 @@ import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoRespDTO;
 import michelavivacqua.Mimi.sWardrobe.services.IndumentiService;
 import org.springframework.data.domain.Page;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -50,7 +51,8 @@ public class IndumentiController {
 
     //    3. GET http://localhost:3001/indumenti
     @GetMapping
-    private List<Indumento> getAllIndumento(){
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public List<Indumento> getAllIndumento(){
         return this.indumentiService.getIndumentiList();
     }
 
