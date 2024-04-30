@@ -56,6 +56,16 @@ public class IndumentiController {
         return this.indumentiService.getIndumentiList();
     }
 
+    //     GET http://localhost:3001/indumenti/miei
+    @GetMapping("/miei")
+    @PreAuthorize("hasAuthority('USER')")
+    public List<Indumento> getIndumentiUtente(Authentication authentication) {
+        Utente utenteAutenticato = (Utente) authentication.getPrincipal();
+        int utenteId = utenteAutenticato.getId();
+        return indumentiService.getIndumentiByUtenteId(utenteId);
+    }
+
+
     //    3.1 Paginazione e ordinamento http://localhost:3001/indumenti/page
     @GetMapping("/page")
     public Page<Indumento> getAllIndumenti(@RequestParam(defaultValue = "0") int page,

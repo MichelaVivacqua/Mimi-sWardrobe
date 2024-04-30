@@ -103,6 +103,9 @@ public class IndumentiService {
         this.indumentiDAO.save(found);
         return found;
     }
-
 //    DOVREI SISTEMARE QUESTO CODICE PER FAR SI CHE OGNI UTENTE POSSA CARICARE LA FOTO SOLO DEI SUOI INDUMENTI????
+
+    public List<Indumento> getIndumentiByUtenteId(int utenteId) {
+        return indumentiDAO.findByUtenteId(utenteId);
+    }
 }
