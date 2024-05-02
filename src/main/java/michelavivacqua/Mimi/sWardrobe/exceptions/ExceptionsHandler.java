@@ -43,4 +43,11 @@ public class ExceptionsHandler {
     public ErrorsResponseDTO handleForbidden(AccessDeniedException ex){
         return new ErrorsResponseDTO("Non hai accesso a questa funzionalità!", LocalDateTime.now());
     }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST) // 400
+    public ErrorsPayload handleIllegalArgumentException(IllegalArgumentException ex){
+        return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
+    }
+
 }

@@ -65,6 +65,30 @@ public class AbbinamentiService {
 //        return abbinamentiDAO.save(abbinamento);
 //    }
 
+//    public Abbinamento saveAbbinamento(NewAbbinamentoDTO newAbbinamentoDTO) {
+//        // Ottengo l'oggetto di autenticazione
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        // Estraggo l'ID dell'utente e ottengo l'utente dal DAO
+//        int utenteId = extractUtenteIdFromAuthentication(authentication);
+//        Utente utente = utentiDAO.findById(utenteId)
+//                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + utenteId));
+//
+//        // Creo un nuovo abbinamento e assegno l'utente
+//        Set<Indumento> indumenti = new HashSet<>();
+//        for (Integer indumentoId : newAbbinamentoDTO.indumenti()) {
+//            Indumento indumento = indumentiDAO.findById(indumentoId)
+//                    .orElseThrow(() -> new IllegalArgumentException("Indumento non trovato con ID: " + indumentoId));
+//            indumenti.add(indumento);
+//        }
+//        Abbinamento abbinamento = new Abbinamento(indumenti);
+//        abbinamento.setUtente(utente);
+//
+//        // Salvo l'abbinamento
+//        System.out.println(abbinamento);
+//        return abbinamentiDAO.save(abbinamento);
+//    }
+
     public Abbinamento saveAbbinamento(NewAbbinamentoDTO newAbbinamentoDTO) {
         // Ottengo l'oggetto di autenticazione
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -74,21 +98,25 @@ public class AbbinamentiService {
         Utente utente = utentiDAO.findById(utenteId)
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + utenteId));
 
-        // Creo un nuovo abbinamento e assegno l'utente
+        // Verifica che tutti gli indumenti nell'abbinamento appartengano all'utente
         Set<Indumento> indumenti = new HashSet<>();
         for (Integer indumentoId : newAbbinamentoDTO.indumenti()) {
             Indumento indumento = indumentiDAO.findById(indumentoId)
                     .orElseThrow(() -> new IllegalArgumentException("Indumento non trovato con ID: " + indumentoId));
+            // Verifica che l'indumento appartenga all'utente
+            if (indumento.getUtente().getId() != utente.getId()) {
+                throw new IllegalArgumentException("Indumento non appartiene all'utente corrente: " + indumentoId);
+            }
             indumenti.add(indumento);
         }
+
+        // Creo un nuovo abbinamento e assegno l'utente
         Abbinamento abbinamento = new Abbinamento(indumenti);
         abbinamento.setUtente(utente);
 
         // Salvo l'abbinamento
-        System.out.println(abbinamento);
         return abbinamentiDAO.save(abbinamento);
     }
-
 
 
     // Metodo per estrarre l'ID dell'utente dalla classe Utente
