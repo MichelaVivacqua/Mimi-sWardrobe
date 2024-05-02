@@ -1,9 +1,12 @@
 package michelavivacqua.Mimi.sWardrobe.payloads;
 
+import jakarta.validation.constraints.NotNull;
+
 import java.util.List;
+import java.util.Set;
+
 
 public record NewAbbinamentoDTO(
-         Long utenteId,
-         List<Integer>indumentiId
-) {
-}
+        @NotNull(message = "La lista degli indumenti è obbligatoria")
+        Set<Integer> indumenti
+) {}

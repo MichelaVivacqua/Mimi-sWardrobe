@@ -16,7 +16,7 @@ import java.util.Set;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString
+@ToString(exclude = {"indumenti", "abbinamenti"})
 @Entity
 public class Utente implements UserDetails {
     @Id

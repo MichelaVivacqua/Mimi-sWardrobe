@@ -1,5 +1,6 @@
 package michelavivacqua.Mimi.sWardrobe.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import michelavivacqua.Mimi.sWardrobe.enums.Colore;
@@ -23,6 +24,7 @@ public class Indumento {
     @Enumerated(EnumType.STRING)
     private Tipo tipo;
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "utente_id")
     private Utente utente;

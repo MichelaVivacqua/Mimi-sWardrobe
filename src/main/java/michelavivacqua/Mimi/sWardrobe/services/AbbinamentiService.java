@@ -1,13 +1,18 @@
 package michelavivacqua.Mimi.sWardrobe.services;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import michelavivacqua.Mimi.sWardrobe.entities.Abbinamento;
 import michelavivacqua.Mimi.sWardrobe.entities.Indumento;
 import michelavivacqua.Mimi.sWardrobe.entities.Utente;
-import michelavivacqua.Mimi.sWardrobe.exceptions.NotFoundException;
+import michelavivacqua.Mimi.sWardrobe.enums.Colore;
+import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewAbbinamentoDTO;
+import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.repositories.AbbinamentiDAO;
 import michelavivacqua.Mimi.sWardrobe.repositories.IndumentiDAO;
 import michelavivacqua.Mimi.sWardrobe.repositories.UtentiDAO;
+import michelavivacqua.Mimi.sWardrobe.exceptions.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -16,7 +21,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,13 +40,30 @@ public class AbbinamentiService {
     @Autowired
     private IndumentiDAO indumentiDAO;
 
+
     public AbbinamentiService(AbbinamentiDAO abbinamentiDAO) {
         this.abbinamentiDAO = abbinamentiDAO;
     }
 
-    public List<Abbinamento> getAbbinamentiByUtenteId(int utenteId) {
-        return abbinamentiDAO.findByUtenteId(utenteId);
+    public List<Abbinamento> getAbbinamentiList() {
+        return abbinamentiDAO.findAll();
     }
+
+
+//    public Abbinamento saveAbbinamento(NewAbbinamentoDTO newAbbinamentoDTO) {
+//        Set<Integer> indumentiIds = newAbbinamentoDTO.indumenti();
+//        Set<Indumento> indumenti = new HashSet<>();
+//
+//        for (Integer indumentoId : indumentiIds) {
+//            Indumento indumento = indumentiDAO.findById(indumentoId)
+//                    .orElseThrow(() -> new IllegalArgumentException("Indumento non trovato con ID: " + indumentoId));
+//            indumenti.add(indumento);
+//        }
+//
+//        Abbinamento abbinamento = new Abbinamento(indumenti);
+//        System.out.println(abbinamento);
+//        return abbinamentiDAO.save(abbinamento);
+//    }
 
     public Abbinamento saveAbbinamento(NewAbbinamentoDTO newAbbinamentoDTO) {
         // Ottengo l'oggetto di autenticazione
@@ -50,20 +74,21 @@ public class AbbinamentiService {
         Utente utente = utentiDAO.findById(utenteId)
                 .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + utenteId));
 
-        // Creo un set di indumenti utilizzando gli ID forniti nel DTO
+        // Creo un nuovo abbinamento e assegno l'utente
         Set<Indumento> indumenti = new HashSet<>();
-        for (int indumentoId : newAbbinamentoDTO.indumentiId()) {
+        for (Integer indumentoId : newAbbinamentoDTO.indumenti()) {
             Indumento indumento = indumentiDAO.findById(indumentoId)
                     .orElseThrow(() -> new IllegalArgumentException("Indumento non trovato con ID: " + indumentoId));
             indumenti.add(indumento);
         }
+        Abbinamento abbinamento = new Abbinamento(indumenti);
+        abbinamento.setUtente(utente);
 
-        // Creo un nuovo abbinamento con l'utente e il set di indumenti
-        Abbinamento abbinamento = new Abbinamento(utente, indumenti);
-
-        // Salvo l'abbinamento nel repository e lo restituisco
+        // Salvo l'abbinamento
+        System.out.println(abbinamento);
         return abbinamentiDAO.save(abbinamento);
     }
+
 
 
     // Metodo per estrarre l'ID dell'utente dalla classe Utente
@@ -86,7 +111,7 @@ public class AbbinamentiService {
     }
 
     public void findByIdAndDelete(int abbinamentoId) {
-        abbinamentiDAO.deleteById(abbinamentoId);
+        indumentiDAO.deleteById(abbinamentoId);
     }
 
 
@@ -97,5 +122,9 @@ public class AbbinamentiService {
     }
 
 
-}
+    public List<Abbinamento> getAbbinamentiByUtenteId(int utenteId) {
+        return abbinamentiDAO.findByUtenteId(utenteId);
+    }
 
+
+}
