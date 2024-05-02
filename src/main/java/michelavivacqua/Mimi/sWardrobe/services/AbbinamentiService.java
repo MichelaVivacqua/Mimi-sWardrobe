@@ -1,14 +1,9 @@
 package michelavivacqua.Mimi.sWardrobe.services;
 
-import com.cloudinary.Cloudinary;
-import com.cloudinary.utils.ObjectUtils;
 import michelavivacqua.Mimi.sWardrobe.entities.Abbinamento;
 import michelavivacqua.Mimi.sWardrobe.entities.Indumento;
 import michelavivacqua.Mimi.sWardrobe.entities.Utente;
-import michelavivacqua.Mimi.sWardrobe.enums.Colore;
-import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewAbbinamentoDTO;
-import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.repositories.AbbinamentiDAO;
 import michelavivacqua.Mimi.sWardrobe.repositories.IndumentiDAO;
 import michelavivacqua.Mimi.sWardrobe.repositories.UtentiDAO;
@@ -21,9 +16,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,45 +41,6 @@ public class AbbinamentiService {
         return abbinamentiDAO.findAll();
     }
 
-
-//    public Abbinamento saveAbbinamento(NewAbbinamentoDTO newAbbinamentoDTO) {
-//        Set<Integer> indumentiIds = newAbbinamentoDTO.indumenti();
-//        Set<Indumento> indumenti = new HashSet<>();
-//
-//        for (Integer indumentoId : indumentiIds) {
-//            Indumento indumento = indumentiDAO.findById(indumentoId)
-//                    .orElseThrow(() -> new IllegalArgumentException("Indumento non trovato con ID: " + indumentoId));
-//            indumenti.add(indumento);
-//        }
-//
-//        Abbinamento abbinamento = new Abbinamento(indumenti);
-//        System.out.println(abbinamento);
-//        return abbinamentiDAO.save(abbinamento);
-//    }
-
-//    public Abbinamento saveAbbinamento(NewAbbinamentoDTO newAbbinamentoDTO) {
-//        // Ottengo l'oggetto di autenticazione
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//
-//        // Estraggo l'ID dell'utente e ottengo l'utente dal DAO
-//        int utenteId = extractUtenteIdFromAuthentication(authentication);
-//        Utente utente = utentiDAO.findById(utenteId)
-//                .orElseThrow(() -> new IllegalArgumentException("Utente non trovato con ID: " + utenteId));
-//
-//        // Creo un nuovo abbinamento e assegno l'utente
-//        Set<Indumento> indumenti = new HashSet<>();
-//        for (Integer indumentoId : newAbbinamentoDTO.indumenti()) {
-//            Indumento indumento = indumentiDAO.findById(indumentoId)
-//                    .orElseThrow(() -> new IllegalArgumentException("Indumento non trovato con ID: " + indumentoId));
-//            indumenti.add(indumento);
-//        }
-//        Abbinamento abbinamento = new Abbinamento(indumenti);
-//        abbinamento.setUtente(utente);
-//
-//        // Salvo l'abbinamento
-//        System.out.println(abbinamento);
-//        return abbinamentiDAO.save(abbinamento);
-//    }
 
     public Abbinamento saveAbbinamento(NewAbbinamentoDTO newAbbinamentoDTO) {
         // Ottengo l'oggetto di autenticazione

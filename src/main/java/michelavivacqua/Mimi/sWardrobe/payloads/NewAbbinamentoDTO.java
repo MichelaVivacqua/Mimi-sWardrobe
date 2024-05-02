@@ -2,7 +2,6 @@ package michelavivacqua.Mimi.sWardrobe.payloads;
 
 import jakarta.validation.constraints.NotNull;
 
-import java.util.List;
 import java.util.Set;
 
 

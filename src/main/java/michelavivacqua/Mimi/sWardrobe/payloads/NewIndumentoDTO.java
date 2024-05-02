@@ -16,7 +16,5 @@ public record NewIndumentoDTO(
 
         @NotNull(message = "È obbligatorio inserire il tipo")
         Tipo tipo
-
-//        Integer utenteId
 ) {
 }
