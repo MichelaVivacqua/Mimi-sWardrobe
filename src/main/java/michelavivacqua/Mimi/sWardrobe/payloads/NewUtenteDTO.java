@@ -19,8 +19,8 @@ public record NewUtenteDTO(
         @NotEmpty(message = "L'email è obbligatoria")
         @Email(message = "L'email inserita non è valida")
         String email,
-        @NotEmpty(message = "L'avatar è obbligatorio")
-        @URL(message="L'URL inserito non è valido")
+//        @NotEmpty(message = "L'avatar è obbligatorio")
+//        @URL(message="L'URL inserito non è valido")
         String propic,
         @NotEmpty(message = "La password è obbligatoria")
         String password,
