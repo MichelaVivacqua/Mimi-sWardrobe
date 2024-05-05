@@ -8,7 +8,7 @@ import org.hibernate.validator.constraints.URL;
 
 public record NewIndumentoDTO(
         @NotEmpty(message = "L'immagine dell'indumento è obbligatoria")
-        @URL(message="L'URL inserito non è valido")
+//        @URL(message="L'URL inserito non è valido")
         String image,
 
         @NotNull(message = "È obbligatorio inserire il colore")

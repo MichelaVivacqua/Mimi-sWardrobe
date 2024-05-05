@@ -99,13 +99,20 @@ public class IndumentiService {
         return url;
     }
 
-    public Indumento uploadIndumentoImage (MultipartFile image, int indumentoId) throws IOException {
-        Indumento found = this.findById(indumentoId);
-        found.setImage(this.uploadImage(image));
-        this.indumentiDAO.save(found);
+    public Indumento uploadIndumentoImage(MultipartFile image, int indumentoId) throws IOException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Utente authenticatedUser = (Utente) authentication.getPrincipal();
+
+        Indumento found = findById(indumentoId);
+        if (found.getUtente().getId() != authenticatedUser.getId()) {
+            throw new IllegalArgumentException("Non sei autorizzato a caricare un'immagine per questo capo d'abbigliamento..");
+        }
+
+        found.setImage(uploadImage(image));
+        indumentiDAO.save(found);
         return found;
     }
-//    DOVREI SISTEMARE QUESTO CODICE SOPRA PER FAR SI CHE OGNI UTENTE POSSA CARICARE LA FOTO SOLO DEI SUOI INDUMENTI????
+
 
     public List<Indumento> getIndumentiByUtenteId(int utenteId) {
         return indumentiDAO.findByUtenteId(utenteId);
