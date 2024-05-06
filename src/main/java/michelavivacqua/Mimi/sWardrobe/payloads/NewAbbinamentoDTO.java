@@ -7,5 +7,5 @@ import java.util.Set;
 
 public record NewAbbinamentoDTO(
         @NotNull(message = "La lista degli indumenti è obbligatoria")
-        Set<Integer> indumenti
+        Set<String> indumenti
 ) {}

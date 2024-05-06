@@ -14,8 +14,8 @@ import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
 @Entity
 public class Indumento {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+//    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
     private String image;
 
     @Enumerated(EnumType.STRING)

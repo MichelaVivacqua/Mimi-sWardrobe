@@ -6,6 +6,7 @@ import michelavivacqua.Mimi.sWardrobe.entities.Indumento;
 import michelavivacqua.Mimi.sWardrobe.entities.Utente;
 import michelavivacqua.Mimi.sWardrobe.enums.Colore;
 import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
+import michelavivacqua.Mimi.sWardrobe.payloads.NewImageIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.repositories.IndumentiDAO;
 import michelavivacqua.Mimi.sWardrobe.repositories.UtentiDAO;
@@ -54,11 +55,14 @@ public class IndumentiService {
 
         // Creo un nuovo indumento e assegno l'utente
         Indumento indumento = new Indumento(
+                newIndumentoDTO.id(),
                 newIndumentoDTO.image(),
                 newIndumentoDTO.colore(),
                 newIndumentoDTO.tipo(),
                 utente
         );
+        System.out.println(indumento);
+        System.out.println(newIndumentoDTO);
         return indumentiDAO.save(indumento);
     }
 
@@ -70,12 +74,12 @@ public class IndumentiService {
     }
 
 
-    public Indumento findById(int id) {
+    public Indumento findById(String id) {
         return indumentiDAO.findById(id)
                 .orElseThrow(() -> new NotFoundException(id));
     }
 
-    public Indumento findByIdAndUpdate(int id, Indumento updatedIndumento) {
+    public Indumento findByIdAndUpdate(String id, Indumento updatedIndumento) {
         Indumento found = findById(id);
         found.setImage(updatedIndumento.getImage());
         found.setColore(updatedIndumento.getColore());
@@ -83,7 +87,7 @@ public class IndumentiService {
         return indumentiDAO.save(found);
     }
 
-    public void findByIdAndDelete(int indumentoId) {
+    public void findByIdAndDelete(String indumentoId) {
         indumentiDAO.deleteById(indumentoId);
     }
 
@@ -99,18 +103,18 @@ public class IndumentiService {
         return url;
     }
 
-    public Indumento uploadIndumentoImage(MultipartFile image, int indumentoId) throws IOException {
+    public NewImageIndumentoDTO uploadIndumentoImage(MultipartFile image, String indumentoId) throws IOException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Utente authenticatedUser = (Utente) authentication.getPrincipal();
 
-        Indumento found = findById(indumentoId);
-        if (found.getUtente().getId() != authenticatedUser.getId()) {
-            throw new IllegalArgumentException("Non sei autorizzato a caricare un'immagine per questo capo d'abbigliamento..");
-        }
+//        Indumento found = findById(indumentoId);
+//        if (found.getUtente().getId() != authenticatedUser.getId()) {
+//            throw new IllegalArgumentException("Non sei autorizzato a caricare un'immagine per questo capo d'abbigliamento..");
+//        }
 
-        found.setImage(uploadImage(image));
-        indumentiDAO.save(found);
-        return found;
+//        found.setImage(uploadImage(image));
+//        indumentiDAO.save(found);
+        return new NewImageIndumentoDTO (uploadImage(image));
     }
 
 

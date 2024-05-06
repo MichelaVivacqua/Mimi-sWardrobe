@@ -53,7 +53,7 @@ public class AbbinamentiService {
 
         // Verifica che tutti gli indumenti nell'abbinamento appartengano all'utente
         Set<Indumento> indumenti = new HashSet<>();
-        for (Integer indumentoId : newAbbinamentoDTO.indumenti()) {
+        for (String indumentoId : newAbbinamentoDTO.indumenti()) {
             Indumento indumento = indumentiDAO.findById(indumentoId)
                     .orElseThrow(() -> new IllegalArgumentException("Indumento non trovato con ID: " + indumentoId));
             // Verifica che l'indumento appartenga all'utente
@@ -92,7 +92,7 @@ public class AbbinamentiService {
     }
 
     public void findByIdAndDelete(int abbinamentoId) {
-        indumentiDAO.deleteById(abbinamentoId);
+        abbinamentiDAO.deleteById(abbinamentoId);
     }
 
 

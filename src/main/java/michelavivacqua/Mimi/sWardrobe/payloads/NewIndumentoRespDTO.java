@@ -1,4 +1,4 @@
 package michelavivacqua.Mimi.sWardrobe.payloads;
 
-public record NewIndumentoRespDTO(int indumentoId) {
+public record NewIndumentoRespDTO(String indumentoId) {
 }

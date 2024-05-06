@@ -5,6 +5,7 @@ import michelavivacqua.Mimi.sWardrobe.entities.Utente;
 import michelavivacqua.Mimi.sWardrobe.enums.Colore;
 import michelavivacqua.Mimi.sWardrobe.enums.Tipo;
 import michelavivacqua.Mimi.sWardrobe.exceptions.BadRequestException;
+import michelavivacqua.Mimi.sWardrobe.payloads.NewImageIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewIndumentoRespDTO;
 import michelavivacqua.Mimi.sWardrobe.services.IndumentiService;
@@ -46,7 +47,7 @@ public class IndumentiController {
 
     // 2. GET http://localhost:3001/indumenti/{{indumentoId}}
     @GetMapping("/{indumentoId}")
-    private Indumento findIndumentoById(@PathVariable int indumentoId){
+    private Indumento findIndumentoById(@PathVariable String indumentoId){
         return this.indumentiService.findById(indumentoId);
     }
 
@@ -77,7 +78,7 @@ public class IndumentiController {
 
     // 4. PUT http://localhost:3001/indumenti/{{indumentoId}} (+ body)
     @PutMapping("/{indumentoId}")
-    private Indumento findByIdAndUpdate(@PathVariable int indumentoId, @RequestBody Indumento body){
+    private Indumento findByIdAndUpdate(@PathVariable String indumentoId, @RequestBody Indumento body){
         return this.indumentiService.findByIdAndUpdate(indumentoId, body);
     }
 
@@ -86,7 +87,7 @@ public class IndumentiController {
     // 5. DELETE http://localhost:3001/indumenti/{indumentoId}
     @DeleteMapping("/{indumentoId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteIndumentoById(@PathVariable int indumentoId) {
+    public void deleteIndumentoById(@PathVariable String indumentoId) {
         this.indumentiService.findByIdAndDelete(indumentoId);
     }
 
@@ -94,7 +95,7 @@ public class IndumentiController {
 //        UPLOAD DI FOTO PER INDUMENTO
 //   POST http://localhost:3001/indumenti/upload/{indumentoId}
     @PostMapping("/upload/{indumentoId}")
-    public Indumento uploadImage (@RequestParam("image") MultipartFile image, @PathVariable int indumentoId) throws IOException {
+    public NewImageIndumentoDTO uploadImage (@RequestParam("image") MultipartFile image, @PathVariable String indumentoId) throws IOException {
         return this.indumentiService.uploadIndumentoImage(image,indumentoId);
     }
 
