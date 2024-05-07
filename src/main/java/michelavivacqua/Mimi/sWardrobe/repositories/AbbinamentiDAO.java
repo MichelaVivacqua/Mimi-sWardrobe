@@ -8,3 +8,4 @@ import java.util.List;
 public interface AbbinamentiDAO extends JpaRepository<Abbinamento, Integer> {
     List<Abbinamento> findByUtenteId(int utenteId);
 }
+

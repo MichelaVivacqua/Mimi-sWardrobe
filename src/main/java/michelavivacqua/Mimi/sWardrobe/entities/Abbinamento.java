@@ -19,7 +19,7 @@ public class Abbinamento {
     private int id;
 
 
-    @JsonIgnore
+//    @JsonIgnore
     @ManyToMany
     @JoinTable(
             name = "abbinamento_indumento",

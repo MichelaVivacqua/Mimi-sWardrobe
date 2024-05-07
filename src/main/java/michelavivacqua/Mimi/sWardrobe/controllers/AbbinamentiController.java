@@ -60,7 +60,7 @@ public class AbbinamentiController {
         return abbinamentiService.getAbbinamentiByUtenteId(utenteId);
     }
 
-
+    
     //    3.1 Paginazione e ordinamento http://localhost:3001/abbinamenti/page
     @GetMapping("/page")
     public Page<Abbinamento> getAllAbbinamenti(@RequestParam(defaultValue = "0") int page,

@@ -107,5 +107,10 @@ public class AbbinamentiService {
         return abbinamentiDAO.findByUtenteId(utenteId);
     }
 
+//    public List<Abbinamento> getAbbinamentiByUtenteId(int utenteId) {
+//        List<Abbinamento> abbinamenti = abbinamentiDAO.findByUtenteId(utenteId);
+//        abbinamenti.forEach(abbinamento -> abbinamento.getIndumenti().size()); // Carica gli indumenti per ogni abbinamento
+//        return abbinamenti;
+//    }
 
 }
