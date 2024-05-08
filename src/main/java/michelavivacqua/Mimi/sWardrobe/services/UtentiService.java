@@ -66,7 +66,7 @@ public class UtentiService {
         found.setPassword(bcrypt.encode(updatedUtente.getPassword()));
         return utentiDAO.save(found);
     }
-
+//OK
     public void findByIdAndDelete(int utenteId) {
         utentiDAO.deleteById(utenteId);
     }
