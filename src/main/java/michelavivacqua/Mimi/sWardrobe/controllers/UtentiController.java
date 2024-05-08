@@ -83,7 +83,7 @@ public class UtentiController {
 
     // 4. PUT http://localhost:3001/utenti/{{utenteId}} (+ body)
     @PutMapping("/{utenteId}")
-    private Utente findByIdAndUpdate(@PathVariable int utenteId, @RequestBody Utente body){
+    public Utente findByIdAndUpdate(@PathVariable int utenteId, @RequestBody Utente body){
         return this.utentiService.findByIdAndUpdate(utenteId, body);
     }
 

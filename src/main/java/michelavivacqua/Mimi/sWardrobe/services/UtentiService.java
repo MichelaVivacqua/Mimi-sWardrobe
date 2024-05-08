@@ -61,6 +61,9 @@ public class UtentiService {
         Utente found = findById(id);
         found.setName(updatedUtente.getName());
         found.setSurname(updatedUtente.getSurname());
+        found.setUsername(updatedUtente.getUsername());
+        found.setEmail(updatedUtente.getEmail());
+        found.setPassword(bcrypt.encode(updatedUtente.getPassword()));
         return utentiDAO.save(found);
     }
 

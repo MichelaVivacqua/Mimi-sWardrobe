@@ -47,7 +47,7 @@ public class Utente implements UserDetails {
         this.email = email;
         this.propic = propic;
         this.password=password;
-        this.ruolo=ruolo;
+        this.ruolo=Ruolo.USER;
     }
 
     @Override
