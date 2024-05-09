@@ -2,12 +2,12 @@ package michelavivacqua.Mimi.sWardrobe.enums;
 
 public enum Tipo {
     JEANS,
-    PANTALONE,
+    PANTALONI,
     GONNA,
     PANTALONCINI,
     TOP,
     MAGLIONCINO,
-    MAGLIETTA,
+    MAGLIA,
     FELPA,
     CAMICIA,
     CANOTTIERA,
@@ -24,5 +24,6 @@ public enum Tipo {
     CAPPOTTO,
     TRENCH,
     GIACCA,
-    GIUBOTTO
+    GIUBOTTO,
+    ABITO
 }
