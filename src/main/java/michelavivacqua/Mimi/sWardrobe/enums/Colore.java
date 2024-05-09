@@ -15,5 +15,9 @@ public enum Colore {
     AZZURRO,
     CIANO,
     LILLA,
-    MAGENTA
+    MAGENTA,
+    BORDEAUX,
+    ORO,
+    ARGENTO,
+    BEIGE
 }
