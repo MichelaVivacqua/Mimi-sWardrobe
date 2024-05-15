@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.time.LocalDateTime;
 
+
 @RestControllerAdvice
 public class ExceptionsHandler {
     @ExceptionHandler(BadRequestException.class)
@@ -17,6 +18,7 @@ public class ExceptionsHandler {
     public ErrorsPayload handleBadRequest(BadRequestException ex){
         return new ErrorsPayload(ex.getMessage(), LocalDateTime.now());
     }
+
 
     @ExceptionHandler(NotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND) // 404
@@ -28,7 +30,7 @@ public class ExceptionsHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR) // 500
     public ErrorsPayload handleGenericErrors(Exception ex){
         ex.printStackTrace(); // per tenere traccia di cosa ha causato l'errore
-        return new ErrorsPayload("Problema lato server! Giuro che lo risolveremo presto! (Scherzo rimarrà così)", LocalDateTime.now());
+        return new ErrorsPayload("Problema lato server! Contatta l'assistenza", LocalDateTime.now());
     }
 
     @ExceptionHandler(UnauthorizedException.class)
