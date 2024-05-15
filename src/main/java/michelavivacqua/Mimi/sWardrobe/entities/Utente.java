@@ -32,11 +32,11 @@ public class Utente implements UserDetails {
     private Ruolo ruolo;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente",cascade = CascadeType.ALL)
     private List<Indumento> indumenti;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "utente")
+    @OneToMany(mappedBy = "utente",cascade = CascadeType.ALL)
     private Set<Abbinamento> abbinamenti;
 
 
