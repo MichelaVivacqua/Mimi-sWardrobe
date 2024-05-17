@@ -5,8 +5,10 @@ import michelavivacqua.Mimi.sWardrobe.entities.Utente;
 import michelavivacqua.Mimi.sWardrobe.exceptions.BadRequestException;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewAbbinamentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewAbbinamentoRespDTO;
+import michelavivacqua.Mimi.sWardrobe.repositories.AbbinamentiDAO;
 import michelavivacqua.Mimi.sWardrobe.services.AbbinamentiService;
 import org.springframework.data.domain.Page;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
@@ -23,6 +27,9 @@ import java.util.List;
 public class AbbinamentiController {
     @Autowired
     private AbbinamentiService abbinamentiService;
+
+    @Autowired
+    private AbbinamentiDAO abbinamentiDAO;
 
 
     //    1. POST http://localhost:3001/abbinamenti (+ body)
@@ -85,6 +92,17 @@ public class AbbinamentiController {
     }
 
 
+    @PutMapping("/{abbinamentoId}/indossato")
+    public ResponseEntity<Abbinamento> markAsWorn(@PathVariable int abbinamentoId) {
+        return abbinamentiDAO.findById(abbinamentoId)
+                .map(abbinamento -> {
+            abbinamento.setIndossato(true);
+            abbinamento.setDataIndossato(LocalDate.now());
+            abbinamentiDAO.save(abbinamento);
+            return ResponseEntity.ok(abbinamento);
+        })
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -18,7 +19,9 @@ public class Abbinamento {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
+    private Boolean indossato;
 
+    private LocalDate dataIndossato;
 //    @JsonIgnore@OneToMany
     @ManyToMany
     @JoinTable(
