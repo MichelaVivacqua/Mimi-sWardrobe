@@ -7,6 +7,7 @@ import michelavivacqua.Mimi.sWardrobe.exceptions.BadRequestException;
 import michelavivacqua.Mimi.sWardrobe.exceptions.NotFoundException;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewUtenteDTO;
 import michelavivacqua.Mimi.sWardrobe.repositories.UtentiDAO;
+import michelavivacqua.Mimi.sWardrobe.tools.MailgunSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +31,9 @@ public class UtentiService {
     @Autowired
     private PasswordEncoder bcrypt;
 
+    @Autowired
+    private MailgunSender mailgunSender;
+
     public UtentiService(UtentiDAO utentiDAO) {
         this.utentiDAO = utentiDAO;
     }
@@ -40,7 +44,7 @@ public class UtentiService {
 
 
 
-    public Utente saveUtente(NewUtenteDTO newUtenteDTO) {
+    public Utente saveUtente(NewUtenteDTO newUtenteDTO) throws BadRequestException {
 
         if (utentiDAO.existsByEmail(newUtenteDTO.email())) {
             throw new BadRequestException("L'email " + newUtenteDTO.email() + " è già in uso, quindi l'utente ha già un account!");
@@ -48,6 +52,7 @@ public class UtentiService {
 
         Utente utente = new Utente(newUtenteDTO.username(),newUtenteDTO.name(), newUtenteDTO.surname(), newUtenteDTO.email(), newUtenteDTO.propic(), bcrypt.encode(newUtenteDTO.password()),newUtenteDTO.ruolo());
         System.out.println(utente);
+        mailgunSender.sendRegistrationEmail(utente);
         return utentiDAO.save(utente);
     }
 
