@@ -25,5 +25,7 @@ public enum Tipo {
     TRENCH,
     GIACCA,
     GIUBOTTO,
-    ABITO
+    ABITO,
+    BLAZER,
+    COSTUME
 }

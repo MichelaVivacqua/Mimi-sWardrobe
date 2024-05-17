@@ -19,5 +19,7 @@ public enum Colore {
     BORDEAUX,
     ORO,
     ARGENTO,
-    BEIGE
+    BEIGE,
+    FANTASIA,
+    MULTICOLOR
 }
