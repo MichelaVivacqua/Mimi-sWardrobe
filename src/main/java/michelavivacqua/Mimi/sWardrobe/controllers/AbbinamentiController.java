@@ -5,6 +5,7 @@ import michelavivacqua.Mimi.sWardrobe.entities.Utente;
 import michelavivacqua.Mimi.sWardrobe.exceptions.BadRequestException;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewAbbinamentoDTO;
 import michelavivacqua.Mimi.sWardrobe.payloads.NewAbbinamentoRespDTO;
+import michelavivacqua.Mimi.sWardrobe.payloads.RatingDTO;
 import michelavivacqua.Mimi.sWardrobe.repositories.AbbinamentiDAO;
 import michelavivacqua.Mimi.sWardrobe.services.AbbinamentiService;
 import org.springframework.data.domain.Page;
@@ -18,6 +19,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -102,6 +104,26 @@ public class AbbinamentiController {
             return ResponseEntity.ok(abbinamento);
         })
             .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+//    @PutMapping("/{abbinamentoId}/rate")
+//    public ResponseEntity<Abbinamento> rateAbbinamento(@PathVariable int abbinamentoId, @RequestBody @Validated RatingDTO ratingDTO, BindingResult validation) {
+//        if (validation.hasErrors()) {
+//            throw new BadRequestException(validation.getAllErrors());
+//        }
+//
+//        Abbinamento updatedAbbinamento = abbinamentiService.rateAbbinamento(abbinamentoId, ratingDTO.valutazione());
+//        return ResponseEntity.ok(updatedAbbinamento);
+//    }
+
+    @PutMapping("/{abbinamentoId}/rate")
+    public ResponseEntity<Abbinamento> rateAbbinamento(@PathVariable int abbinamentoId, @RequestBody @Validated RatingDTO ratingDTO, BindingResult validation) {
+        if (validation.hasErrors()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Validation error");
+        }
+
+        Abbinamento updatedAbbinamento = abbinamentiService.rateAbbinamento(abbinamentoId, ratingDTO.valutazione());
+        return ResponseEntity.ok(updatedAbbinamento);
     }
 
 

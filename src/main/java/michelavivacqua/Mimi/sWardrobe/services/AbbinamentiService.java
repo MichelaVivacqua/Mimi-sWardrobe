@@ -113,4 +113,13 @@ public class AbbinamentiService {
 //        return abbinamenti;
 //    }
 
+    public Abbinamento rateAbbinamento(int abbinamentoId, int valutazione) {
+        return abbinamentiDAO.findById(abbinamentoId)
+                .map(abbinamento -> {
+                    abbinamento.setValutazione(valutazione);
+                    return abbinamentiDAO.save(abbinamento);
+                })
+                .orElseThrow(() -> new NotFoundException("Abbinamento non trovato"));
+    }
+
 }

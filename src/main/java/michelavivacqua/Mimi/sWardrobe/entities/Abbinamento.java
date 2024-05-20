@@ -22,6 +22,8 @@ public class Abbinamento {
     private Boolean indossato;
 
     private LocalDate dataIndossato;
+
+    private int valutazione;
 //    @JsonIgnore@OneToMany
     @ManyToMany
     @JoinTable(
