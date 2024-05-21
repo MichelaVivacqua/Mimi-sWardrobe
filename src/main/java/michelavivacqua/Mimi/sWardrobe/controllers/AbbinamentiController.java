@@ -106,16 +106,6 @@ public class AbbinamentiController {
             .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-//    @PutMapping("/{abbinamentoId}/rate")
-//    public ResponseEntity<Abbinamento> rateAbbinamento(@PathVariable int abbinamentoId, @RequestBody @Validated RatingDTO ratingDTO, BindingResult validation) {
-//        if (validation.hasErrors()) {
-//            throw new BadRequestException(validation.getAllErrors());
-//        }
-//
-//        Abbinamento updatedAbbinamento = abbinamentiService.rateAbbinamento(abbinamentoId, ratingDTO.valutazione());
-//        return ResponseEntity.ok(updatedAbbinamento);
-//    }
-
     @PutMapping("/{abbinamentoId}/rate")
     public ResponseEntity<Abbinamento> rateAbbinamento(@PathVariable int abbinamentoId, @RequestBody @Validated RatingDTO ratingDTO, BindingResult validation) {
         if (validation.hasErrors()) {
