@@ -25,7 +25,16 @@ Mantieni anche tu il tuo armadio a portata di app 📱
 
 ## API Endpoints
 
-L'applicazione espone API endpoints per interagire con il database. Puoi trovare la documentazione API nell'IDE o consultare il codice sorgente per ulteriori dettagli.
+L'applicazione espone API endpoints per interagire con il database. La documentazione completa è disponibile in formato OpenAPI (Swagger).
+
+Puoi visualizzarla documentazione utilizzando Swagger Editor:
+
+1. Vai a [Swagger Editor](https://editor.swagger.io/).
+2. Clicca su `File -> Import File`.
+3. Seleziona il file `openapi.json` dalla directory `/docs`.
+
+Oppure puoi visualizzarla direttamente dal browser aprendo il file `openapi.json` con un visualizzatore di OpenAPI.
+
 
 ## Link al repository front-end
 

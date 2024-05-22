@@ -1,0 +1,1260 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Gestione di Utenti, Auth, Indumenti e Abbinamenti API",
+    "description": "API per la gestione degli utenti, l'autenticazione e la gestione degli indumenti e degli abbinamenti",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3001",
+      "description": "Local server"
+    }
+  ],
+  "paths": {
+    "/utenti": {
+      "post": {
+        "summary": "Crea un nuovo utente",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUtenteDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Utente creato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewUtenteRespDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Ottieni tutti gli utenti",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista degli utenti",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Utente"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/utenti/me": {
+      "get": {
+        "summary": "Ottieni il profilo dell'utente autenticato",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dettagli dell'utente autenticato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Utente"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "summary": "Aggiorna il profilo dell'utente autenticato",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Utente"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Profilo aggiornato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Utente"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina il profilo dell'utente autenticato",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Profilo eliminato"
+          }
+        }
+      }
+    },
+    "/utenti/{utenteId}": {
+      "get": {
+        "summary": "Ottieni un utente per ID",
+        "parameters": [
+          {
+            "name": "utenteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dettagli dell'utente",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Utente"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Utente non trovato"
+          }
+        }
+      },
+      "put": {
+        "summary": "Aggiorna un utente per ID",
+        "parameters": [
+          {
+            "name": "utenteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Utente"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Utente aggiornato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Utente"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina un utente per ID",
+        "parameters": [
+          {
+            "name": "utenteId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Utente eliminato"
+          }
+        }
+      }
+    },
+    "/utenti/page": {
+      "get": {
+        "summary": "Ottieni una pagina di utenti",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "default": 0
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "default": 2
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "default": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagina di utenti",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageUtente"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/utenti/upload": {
+      "post": {
+        "summary": "Carica un'immagine per l'utente autenticato",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "propic": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Immagine aggiornata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Utente"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Autentica un utente e genera un token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UtenteLoginDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Autenticazione riuscita",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UtenteLoginRespDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Registra un nuovo utente",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewUtenteDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Utente registrato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewUtenteRespDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indumenti": {
+      "post": {
+        "summary": "Crea un nuovo indumento",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewIndumentoDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Indumento creato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewIndumentoRespDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Ottieni tutti gli indumenti (per amministratori)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista degli indumenti",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Indumento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indumenti/{indumentoId}": {
+      "get": {
+        "summary": "Ottieni un indumento per ID",
+        "parameters": [
+          {
+            "name": "indumentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dettagli dell'indumento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Indumento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Indumento non trovato"
+          }
+        }
+      },
+      "put": {
+        "summary": "Aggiorna un indumento per ID",
+        "parameters": [
+          {
+            "name": "indumentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Indumento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Indumento aggiornato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Indumento"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina un indumento per ID",
+        "parameters": [
+          {
+            "name": "indumentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Indumento eliminato"
+          }
+        }
+      }
+    },
+    "/indumenti/miei": {
+      "get": {
+        "summary": "Ottieni tutti gli indumenti dell'utente autenticato",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista degli indumenti dell'utente autenticato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Indumento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indumenti/page": {
+      "get": {
+        "summary": "Ottieni una pagina di indumenti",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "default": 0
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "default": 1
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "default": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagina di indumenti",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageIndumento"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indumenti/upload/{indumentoId}": {
+      "post": {
+        "summary": "Carica un'immagine per un indumento",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "indumentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "image": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Immagine aggiornata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewImageIndumentoDTO"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indumenti/miei/colore": {
+      "get": {
+        "summary": "Ottieni indumenti dell'utente autenticato per colore",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "colore",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "BLU",
+                "ROSSO",
+                "VERDE",
+                "GIALLO",
+                "NERO",
+                "BIANCO",
+                "GRIGIO",
+                "ARANCIONE",
+                "VIOLA",
+                "ROSA",
+                "MARRONE",
+                "AZZURRO",
+                "CIANO",
+                "LILLA",
+                "MAGENTA",
+                "BORDEAUX",
+                "ORO",
+                "ARGENTO",
+                "BEIGE",
+                "FANTASIA",
+                "MULTICOLOR"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista degli indumenti per colore",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Indumento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/indumenti/miei/tipo": {
+      "get": {
+        "summary": "Ottieni indumenti dell'utente autenticato per tipo",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "PANTALONI",
+                "CAMICIA",
+                "GIACCA",
+                "GONNA",
+                "ABITO",
+                "JEANS",
+                "PANTALONCINI",
+                "TOP",
+                "MAGLIONCINO",
+                "MAGLIA",
+                "FELPA",
+                "CAMICIA",
+                "CANOTTIERA",
+                "BODY",
+                "BORSA",
+                "CINTURA",
+                "SNEAKERS",
+                "SANDALI",
+                "TACCHI",
+                "ANFIBI",
+                "STIVALI",
+                "TUTA",
+                "SCIARPA",
+                "CAPPOTTO",
+                "TRENCH",
+                "GIUBOTTO",
+                "BLAZER",
+                "COSTUME"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista degli indumenti per tipo",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Indumento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/abbinamenti": {
+      "post": {
+        "summary": "Crea un nuovo abbinamento",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewAbbinamentoDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Abbinamento creato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NewAbbinamentoRespDTO"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Ottieni tutti gli abbinamenti (solo per gli amministratori)",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista degli abbinamenti",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Abbinamento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/abbinamenti/{abbinamentoId}": {
+      "get": {
+        "summary": "Ottieni un abbinamento per ID",
+        "parameters": [
+          {
+            "name": "abbinamentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dettagli dell'abbinamento",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Abbinamento"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Abbinamento non trovato"
+          }
+        }
+      },
+      "put": {
+        "summary": "Aggiorna un abbinamento per ID",
+        "parameters": [
+          {
+            "name": "abbinamentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Abbinamento"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Abbinamento aggiornato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Abbinamento"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Elimina un abbinamento per ID",
+        "parameters": [
+          {
+            "name": "abbinamentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Abbinamento eliminato"
+          }
+        }
+      }
+    },
+    "/abbinamenti/miei": {
+      "get": {
+        "summary": "Ottieni tutti gli abbinamenti dell'utente autenticato",
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista degli abbinamenti dell'utente autenticato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Abbinamento"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/abbinamenti/page": {
+      "get": {
+        "summary": "Ottieni una pagina di abbinamenti",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "default": 0
+          },
+          {
+            "name": "size",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "default": 1
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            },
+            "default": "id"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Pagina di abbinamenti",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PageAbbinamento"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/abbinamenti/{abbinamentoId}/indossato": {
+      "put": {
+        "summary": "Contrassegna l'abbinamento come indossato",
+        "parameters": [
+          {
+            "name": "abbinamentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Abbinamento contrassegnato come indossato",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Abbinamento"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/abbinamenti/{abbinamentoId}/rate": {
+      "put": {
+        "summary": "Valuta un abbinamento",
+        "parameters": [
+          {
+            "name": "abbinamentoId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RatingDTO"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Valutazione registrata",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Abbinamento"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Utente": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          }
+        }
+      },
+      "NewUtenteDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "John Doe"
+          },
+          "email": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        }
+      },
+      "NewUtenteRespDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          }
+        }
+      },
+      "PageUtente": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Utente"
+            }
+          },
+          "totalElements": {
+            "type": "integer",
+            "example": 10
+          },
+          "totalPages": {
+            "type": "integer",
+            "example": 5
+          },
+          "size": {
+            "type": "integer",
+            "example": 2
+          },
+          "number": {
+            "type": "integer",
+            "example": 0
+          }
+        }
+      },
+      "UtenteLoginDTO": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "johndoe@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "password123"
+          }
+        }
+      },
+      "UtenteLoginRespDTO": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "type": "string",
+            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          }
+        }
+      },
+      "Indumento": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "name": {
+            "type": "string",
+            "example": "Pantaloni"
+          },
+          "colore": {
+            "type": "string",
+            "enum": [
+              "BLU",
+              "ROSSO",
+              "VERDE",
+              "GIALLO",
+              "NERO",
+              "BIANCO",
+              "GRIGIO",
+              "ARANCIONE",
+              "VIOLA",
+              "ROSA",
+              "MARRONE",
+              "AZZURRO",
+              "CIANO",
+              "LILLA",
+              "MAGENTA",
+              "BORDEAUX",
+              "ORO",
+              "ARGENTO",
+              "BEIGE",
+              "FANTASIA",
+              "MULTICOLOR"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "PANTALONI",
+              "CAMICIA",
+              "GIACCA",
+              "GONNA",
+              "ABITO",
+              "JEANS",
+              "PANTALONCINI",
+              "TOP",
+              "MAGLIONCINO",
+              "MAGLIA",
+              "FELPA",
+              "CAMICIA",
+              "CANOTTIERA",
+              "BODY",
+              "BORSA",
+              "CINTURA",
+              "SNEAKERS",
+              "SANDALI",
+              "TACCHI",
+              "ANFIBI",
+              "STIVALI",
+              "TUTA",
+              "SCIARPA",
+              "CAPPOTTO",
+              "TRENCH",
+              "GIUBOTTO",
+              "BLAZER",
+              "COSTUME"
+            ]
+          }
+        }
+      },
+      "NewIndumentoDTO": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Pantaloni"
+          },
+          "colore": {
+            "type": "string",
+            "enum": [
+              "BLU",
+              "ROSSO",
+              "VERDE",
+              "GIALLO",
+              "NERO",
+              "BIANCO",
+              "GRIGIO",
+              "ARANCIONE",
+              "VIOLA",
+              "ROSA",
+              "MARRONE",
+              "AZZURRO",
+              "CIANO",
+              "LILLA",
+              "MAGENTA",
+              "BORDEAUX",
+              "ORO",
+              "ARGENTO",
+              "BEIGE",
+              "FANTASIA",
+              "MULTICOLOR"
+            ]
+          },
+          "tipo": {
+            "type": "string",
+            "enum": [
+              "PANTALONI - CAMICIA - GIACCA - GONNA - ABITO - JEANS - PANTALONCINI - TOP - MAGLIONCINO - MAGLIA - FELPA - CAMICIA - CANOTTIERA - BODY - BORSA - CINTURA - SNEAKERS - SANDALI - TACCHI - ANFIBI - STIVALI - TUTA - SCIARPA - CAPPOTTO - TRENCH - GIUBOTTO - BLAZER - COSTUME"
+            ]
+          }
+        }
+      },
+      "NewIndumentoRespDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          }
+        }
+      },
+      "PageIndumento": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Indumento"
+            }
+          },
+          "totalElements": {
+            "type": "integer",
+            "example": 10
+          },
+          "totalPages": {
+            "type": "integer",
+            "example": 5
+          },
+          "size": {
+            "type": "integer",
+            "example": 2
+          },
+          "number": {
+            "type": "integer",
+            "example": 0
+          }
+        }
+      },
+      "NewImageIndumentoDTO": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "example": "1"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "http://example.com/image.jpg"
+          }
+        }
+      }
+    }
+  },
+  "securitySchemes": {
+    "bearerAuth": {
+      "type": "http",
+      "scheme": "bearer",
+      "bearerFormat": "JWT"
+    }
+  }
+}
