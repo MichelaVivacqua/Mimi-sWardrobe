@@ -21,7 +21,8 @@ Mantieni anche tu il tuo armadio a portata di app 📱
 1. Clona il repository da GitHub.
 2. Assicurati di avere PostgreSQL installato sul tuo sistema e crea un database
 3. Crea nel progetto il file `env.properties` con le variabili d'ambiente necessarie ( SERVER_PORT, PG_USERNAME, PG_PASSWORD, PG_URL con relativo riferimento alla porta in cui gira il frontend, es. jdbc:postgresql://localhost:5432/wardrobe, CLOUDINARY_NAME, CLOUDINARY_SECRET, CLOUDINARY_KEY, JWT_SECRET, MAILGUN_API_KEY, MAILGUN_DOMAIN_NAME)
-4. Esegui l'applicazione nel tuo IDE
+4. Aggiungi nel file application.properties la riga spring.config.import=file:env.properties
+5. Esegui l'applicazione nel tuo IDE
 
 ## API Endpoints
 
@@ -44,6 +45,8 @@ https://github.com/MichelaVivacqua/mimis_wardrobe_fe
 ## Link alla versione deployata:
 
 https://amused-jeniece-mimiswardrobe-dcb5d9c7.koyeb.app/
+
+front-end: https://mimis-wardrobe-fe.vercel.app/MyNavbar
 
 ## Contatti
 
