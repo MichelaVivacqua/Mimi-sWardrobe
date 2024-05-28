@@ -43,7 +43,7 @@ https://github.com/MichelaVivacqua/mimis_wardrobe_fe
 
 ## Link alla versione deployata:
 
-da aggiungere
+https://amused-jeniece-mimiswardrobe-dcb5d9c7.koyeb.app/
 
 ## Contatti
 
